@@ -1,12 +1,18 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 function App() {
   const [contacts, setContacts] = useState([])
   const [name, setName] = useState("")
   const [number, setNumber] = useState("")
   const [editingIndex, setEditingIndex] = useState(null)
-  const [editingReg, setEditingReg] = useState({name:'', number:''})
+  const [editingReg, setEditingReg] = useState({ name: '', number: '' })
 
+  useEffect(()=>{
+    fetch('http://localhost:5000/contacts')
+    .then(res=> res.json())
+    .then(data=>setContacts(data))
+  }, [contacts])
+  
   function handleDelete(index) {
     setContacts(prevContacts => {
       return (prevContacts.filter((c, idx) => idx !== index))
@@ -14,9 +20,9 @@ function App() {
   }
   function handleUpdate(index) {
     setEditingIndex(index)
-    setEditingReg({name:contacts[index].name, number:contacts[index].number})
+    setEditingReg({ name: contacts[index].name, number: contacts[index].number })
     if (index === editingIndex) {
-       setContacts(prevContacts=>{
+      setContacts(prevContacts => {
         const newList = prevContacts
         newList[index] = editingReg
         return newList
@@ -53,16 +59,16 @@ function App() {
             {editingIndex === index ?
               <div>
                 <label htmlFor="nameUpd">Name:</label>
-                <input type="text" id="nameUpd" value={editingReg.name} 
-                onChange={e=>{
-                  setEditingReg(prevData=>({...prevData,name:e.target.value}))
-                }}/>
+                <input type="text" id="nameUpd" value={editingReg.name}
+                  onChange={e => {
+                    setEditingReg(prevData => ({ ...prevData, name: e.target.value }))
+                  }} />
                 <br />
                 <label htmlFor="numbUpd">Number:</label>
                 <input type="text" id="numbUpd" value={editingReg.number}
-                onChange={e=>{
-                  setEditingReg(prevData=>({...prevData,number:e.target.value}))
-                }} />
+                  onChange={e => {
+                    setEditingReg(prevData => ({ ...prevData, number: e.target.value }))
+                  }} />
               </div>
               : <div>
                 <p>Name:    {cont.name}</p>
