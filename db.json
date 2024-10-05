@@ -1,15 +1,14 @@
 {
-    "contacts": [
-      {
-        "id": 1,
-        "name": "John Doe",
-        "number": "123456789"
-      },
-      {
-        "id": 2,
-        "name": "Jane Smith",
-        "number": "987654321"
-      }
-    ]
-  }
-  
+  "contacts": [
+    {
+      "name": "John Doe Zoo",
+      "number": "123456789",
+      "id": "0"
+    },
+    {
+      "id": "1",
+      "name": "Jane Smith",
+      "number": "987654321"
+    }
+  ]
+}

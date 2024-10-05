@@ -12,7 +12,7 @@ function App() {
     .then(res=> res.json())
     .then(data=>setContacts(data))
   }, [contacts])
-  
+
   function handleDelete(index) {
     setContacts(prevContacts => {
       return (prevContacts.filter((c, idx) => idx !== index))
@@ -22,10 +22,14 @@ function App() {
     setEditingIndex(index)
     setEditingReg({ name: contacts[index].name, number: contacts[index].number })
     if (index === editingIndex) {
-      setContacts(prevContacts => {
-        const newList = prevContacts
-        newList[index] = editingReg
-        return newList
+      const newBody = {
+        name:editingReg.name, number:editingReg.number
+      }
+      fetch(`http://localhost:5000/contacts/${editingIndex}`, {
+        method:'PUT',
+        headers:{
+          'Content-Type':'Application/json'
+        },body:JSON.stringify(newBody)
       })
       setEditingIndex(null)
 
@@ -52,11 +56,11 @@ function App() {
         <button type="submit">Add</button>
       </form>
       <h3>Numbers</h3>
-      {contacts.map((cont, index) => {
+      {contacts.map((cont) => {
         return (
-          <div key={index}>
-            <small>{index}</small>
-            {editingIndex === index ?
+          <div key={cont.id}>
+            <small>{cont.id}</small>
+            {editingIndex === cont.id ?
               <div>
                 <label htmlFor="nameUpd">Name:</label>
                 <input type="text" id="nameUpd" value={editingReg.name}
@@ -74,8 +78,8 @@ function App() {
                 <p>Name:    {cont.name}</p>
                 <p>Number:  {cont.number}</p></div>}
             <br />
-            <button onClick={() => handleDelete(index)}>Delete</button>
-            <button onClick={() => handleUpdate(index)}>{editingIndex === index ? 'Done' : 'Edit'}</button>
+            <button onClick={() => handleDelete(cont.id)}>Delete</button>
+            <button onClick={() => handleUpdate(cont.id)}>{editingIndex === cont.id ? 'Done' : 'Edit'}</button>
             <hr />
           </div>
         )
