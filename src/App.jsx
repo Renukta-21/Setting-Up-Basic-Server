@@ -14,9 +14,15 @@ function App() {
   }, [contacts])
 
   function handleDelete(index) {
-    setContacts(prevContacts => {
+    /* setContacts(prevContacts => {
       return (prevContacts.filter((c, idx) => idx !== index))
-    })
+    }) */
+   fetch(`http://localhost:5000/contacts/${index}`,{
+    method:"DELETE",
+    headers:{
+      "Content-Type":"application/json"
+    }
+   })
   }
   function handleUpdate(index) {
     setEditingIndex(index)
@@ -41,7 +47,16 @@ function App() {
     const objForm = {
       name, number
     }
-    setContacts(prevContacts => prevContacts.concat(objForm))
+    const maxId = contacts.reduce((max, contact)=>{
+      return contact.id>max ? contact.id: max 
+    })
+    fetch(`http://localhost:5000/contacts`,{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json'
+      },
+      body:JSON.stringify({...objForm, id: maxId +1})
+    })
     setName("")
     setNumber("")
   }
